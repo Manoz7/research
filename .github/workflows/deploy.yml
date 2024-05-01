@@ -1,0 +1,41 @@
+name: Deploy to HW
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v2
+
+      - name: Set up SSH key and whitelist HW IP address
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HW_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan ${{ secrets.HW_IP }} >> ~/.ssh/known_hosts
+
+      - name: Create .env file dynamically
+        env:
+          ENV: ${{ secrets.ENV }}
+          HW_USERNAME: ${{ secrets.HW_USERNAME }}
+        #   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          echo "ENV=${ENV}" >> env
+          echo "HW_USERNAME=${HW_USERNAME}" >> env
+        #   echo "OPENAI_API_KEY=${OPENAI_API_KEY}" >> env
+
+      - name: Copy files to remote server
+        env:
+          HW_HOST: ${{ secrets.HW_IP }}
+          HW_USERNAME: ${{ secrets.HW_USERNAME }}
+        run: |
+          rsync -avz --progress --exclude='.git' --exclude='__pycache__' --exclude='*.pyc' * $HW_USERNAME@$HW_HOST:/home2/nrccnepa/testmanoj
+
+      - name: Clean up SSH key
+        if: always()
+        run: rm -f ~/.ssh/id_rsa
