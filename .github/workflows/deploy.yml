@@ -34,7 +34,7 @@ jobs:
           HW_HOST: ${{ secrets.HW_IP }}
           HW_USERNAME: ${{ secrets.HW_USERNAME }}
         run: |
-          rsync -avz --progress --exclude='.git' --exclude='__pycache__' --exclude='*.pyc' * $HW_USERNAME@$HW_HOST:/home2/nrccnepa/testmanoj
+          scp -r * $HW_USERNAME@$HW_HOST:/home2/nrccnepa/testmanoj
 
       - name: Clean up SSH key
         if: always()
