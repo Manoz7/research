@@ -3,7 +3,7 @@ name: Deploy to HW
 on:
   push:
     branches:
-      - master
+      - test
 
 jobs:
   deploy:
