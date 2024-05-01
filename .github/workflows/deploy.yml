@@ -31,8 +31,9 @@ jobs:
         env:
           HW_IP: ${{ secrets.HW_IP }}
           HW_USERNAME: ${{ secrets.HW_USERNAME }}
+          HW_PASS: ${{ secrets.HW_PASS }}
         run: |
-          scp -r * $HW_USERNAME@$HW_IP:/home2/nrccnepa/testmanoj
+          sshpass -p "$HW_PASS" scp -r * $HW_USERNAME@$HW_IP:/home2/nrccnepa/testmanoj
 
       - name: Clean up SSH key
         if: always()
