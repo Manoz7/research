@@ -23,18 +23,16 @@ jobs:
         env:
           ENV: ${{ secrets.ENV }}
           HW_USERNAME: ${{ secrets.HW_USERNAME }}
-        #   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           echo "ENV=${ENV}" >> env
           echo "HW_USERNAME=${HW_USERNAME}" >> env
-        #   echo "OPENAI_API_KEY=${OPENAI_API_KEY}" >> env
 
       - name: Copy files to remote server
         env:
           HW_HOST: ${{ secrets.HW_IP }}
           HW_USERNAME: ${{ secrets.HW_USERNAME }}
         run: |
-          scp -r * $HW_USERNAME@$HW_HOST:/home2/nrccnepa/testmanoj
+          scp -r * $HW_USERNAME@$HW_IP:/home2/nrccnepa/testmanoj
 
       - name: Clean up SSH key
         if: always()
