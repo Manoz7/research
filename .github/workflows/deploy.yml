@@ -29,7 +29,7 @@ jobs:
 
       - name: Copy files to remote server
         env:
-          HW_HOST: ${{ secrets.HW_IP }}
+          HW_IP: ${{ secrets.HW_IP }}
           HW_USERNAME: ${{ secrets.HW_USERNAME }}
         run: |
           scp -r * $HW_USERNAME@$HW_IP:/home2/nrccnepa/testmanoj
